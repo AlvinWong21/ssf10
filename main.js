@@ -127,7 +127,17 @@ app.get('/info/:bookId', async (req, resp) => {
                 resp.render('info', {bookResults, genresList})
             },
             'application/json': () => {
-                resp.render('info', {bookResults, genresList})
+                let data = {
+                    bookId: bookResults.book_id,
+                    title: bookResults.title,
+                    authors: bookResults.authors,
+                    summary: bookResults.description,
+                    pages: bookResults.pages,
+                    rating: bookResults.rating,
+                    ratingCount: bookResults.rating_count,
+                    genre: bookResults.genres
+                }
+                resp.json(data)
             },
             'default': () => {
                 resp.status(406)

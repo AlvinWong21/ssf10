@@ -1,36 +1,41 @@
-<div class="container">
-<h2>Letter {{searchLetter}}</h2>
-
-<table>
-    {{#each resultsLetter}}
-    <tr>
-        <td>
-            <a href="/info/{{this.book_id}}">{{this.title}}</a>
-        </td>
-    </tr>
-    {{/each}}
-</table>   
-
-{{#if firstPage}}
-<button type="button" disabled>Previous</button>
-{{else}}
-<form method="GET" action="/{{searchLetter}}">
-    <input type="hidden" name="offset" value="{{prevOffset}}">
-    <button type="submit">Previous</button>
-</form>
-{{/if}}
-
-<p>Page {{pageNum}} / {{pageTotal}}</p>
-
-{{#if lastPage}}
-<button type="button" disabled>Next</button>
-{{else}}
-<form method="GET" action="/{{searchLetter}}">
-    <input type="hidden" name="offset" value="{{nextOffset}}">
-    <button type="submit">Next</button>
-</form>
-{{/if}}
-
-<a href="/"><button type="submit">Home</button></a>
-
+<div class="row justify-content-center">
+    <h2>Letter {{searchLetter}}</h2>
 </div>
+
+<ul class="list-group">
+    {{#each resultsLetter}}
+        <li class="list-group-item">
+            <a href="/info/{{this.book_id}}">{{this.title}}</a>
+        </li>
+    {{/each}}
+</ul>   
+
+<div class="container mt-3 mb-3">
+    <div class="row justify-content-center" style="align content: center">
+        <div class="col">
+            {{#if firstPage}}
+            <button type="button" style="width: 100px" class="btn btn-sm btn-primary" disabled>Previous</button>
+            {{else}}
+            <form method="GET" action="/{{searchLetter}}">
+                <input type="hidden" name="offset" value="{{prevOffset}}">
+                <button type="submit" style="width: 100px" class="btn btn-sm btn-primary">Previous</button>
+            </form>
+            {{/if}}
+        </div>
+        <div class="col">
+            <h5>Page {{pageNum}} / {{pageTotal}}</h5>
+        </div>
+        <div class="col">
+            {{#if lastPage}}
+            <button type="button" style="width: 100px" class="btn btn-sm btn-primary" disabled>Next</button>
+            {{else}}
+            <form method="GET" action="/{{searchLetter}}">
+                <input type="hidden" name="offset" value="{{nextOffset}}">
+                <button type="submit" style="width: 100px" class="btn btn-sm btn-primary">Next</button>
+            </form>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+<a href="/"><button type="submit" class="btn btn-sm btn-block btn-light">Home</button></a>

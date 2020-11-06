@@ -1,19 +1,31 @@
-<div class="container">
-<h2>{{bookResults.title}}</h2>
+<div class="container mb-5">
 
-<p>Authors: {{bookResults.authors}}</p>
+<div class="row justify-content-center">
+    <div class=".col-6 .col-md-4">
+        <h2>{{bookResults.title}}</h2>
+        <p>by {{bookResults.authors}}</p>
+    </div>
+</div>
 
-<p>Number of pages: {{bookResults.pages}}</p>
+<div class="row justify-content-center">
+    <div class=".col-4">
+        <img src="{{bookResults.image_url}}" alt="">
+    </div>
 
-<p>Rating: {{bookResults.rating}}</p>
-<p>Number of Rating(s): {{bookResults.rating_count}}</p>
+    <div class=".col-8">
+        <p>Number of pages: {{bookResults.pages}}</p>
+        <p>Rating: {{bookResults.rating}}</p>
+        <p>Number of Rating(s): {{bookResults.rating_count}}</p>
 
-<p>Genres: {{genresList}}</p>
+        <p>Genres: {{genresList}}</p>
 
-<img src="{{bookResults.image_url}}" alt="">
+        <p>{{bookResults.description}}</p>
+    </div>
 
-<a href="/reviews/{{bookResults.title}}/{{bookResults.authors}}"><button type="submit">Find Review</button>
+</div>
+
+<a href="/reviews/{{bookResults.title}}/{{bookResults.authors}}"><button type="submit" class="btn btn-lg btn-warning">Find Review</button>
 </a>
-<a href="/"><button type="submit">Home</button></a>
+<a href="/"><button type="submit" class="btn btn-lg btn-light">Home</button></a>
 
 </div>
