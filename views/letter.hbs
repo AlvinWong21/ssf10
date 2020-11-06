@@ -1,3 +1,4 @@
+<div class="container">
 <h2>Letter {{searchLetter}}</h2>
 
 <table>
@@ -10,16 +11,26 @@
     {{/each}}
 </table>   
 
+{{#if firstPage}}
+<button type="button" disabled>Previous</button>
+{{else}}
 <form method="GET" action="/{{searchLetter}}">
     <input type="hidden" name="offset" value="{{prevOffset}}">
     <button type="submit">Previous</button>
 </form>
+{{/if}}
 
 <p>Page {{pageNum}} / {{pageTotal}}</p>
 
+{{#if lastPage}}
+<button type="button" disabled>Next</button>
+{{else}}
 <form method="GET" action="/{{searchLetter}}">
     <input type="hidden" name="offset" value="{{nextOffset}}">
     <button type="submit">Next</button>
 </form>
+{{/if}}
 
 <a href="/"><button type="submit">Home</button></a>
+
+</div>

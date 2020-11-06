@@ -4,7 +4,7 @@ const handlebars = require('express-handlebars')
 const fetch = require('node-fetch')
 const withQuery = require('with-query').default
 const mysql = require('mysql2/promise')
-const { EWOULDBLOCK } = require('constants')
+const morgan = require('morgan')
 
 //configure PORT
 const PORT = parseInt(process.argv[2]) || parseInt(process.env.PORT) || 3000
@@ -14,11 +14,11 @@ const PUB_API_KEY = process.env.PUB_API_KEY || ""
 
 //create database connection pool
 const pool = mysql.createPool({
-	host: process.env.DB_HOST || 'localhost',
+	host: process.env.DB_HOST,
 	port: parseInt(process.env.DB_PORT) || 3306,
-	database: 'goodreads',
-	user: process.env.DB_USER || 'root',
-	password: process.env.DB_PASSWORD || 'root',
+	database: process.env.DB_NAME,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
 	connectionLimit: 4
 })
 
@@ -33,6 +33,9 @@ const app = express()
 //configure handlebars
 app.engine('hbs', handlebars({defaultLayout: 'default.hbs'}))
 app.set('view engine', 'hbs')
+
+//morgan
+app.use(morgan('combined'))
 
 //apps
 app.get('/', (req, resp) => {
@@ -58,6 +61,11 @@ app.get('/:bookInit', async (req, resp) => {
 
     //calculate total page number
     const pageTotal = Math.ceil(bookCount / limit)
+    let pageNum = Math.ceil(Math.max(1, (offset/limit + 1)))
+    let prevOffset = Math.max(0, offset - limit)
+    let nextOffset = offset + limit
+    let firstPage = (pageNum <= 1)
+    let lastPage = (pageNum >= pageTotal)
 
     console.info(bookCount)
     try {
@@ -68,18 +76,19 @@ app.get('/:bookInit', async (req, resp) => {
         const resultsLetter = sqlResults[0] //.map(d => [d.title, b.id])
 
         console.info(resultsLetter)
-        
+        console.info(firstPage, lastPage)
+
         resp.status(200)
         resp.type('text/html')
         resp.render('letter', {
             resultsLetter, 
             searchLetter,
             pageTotal,
-            pageNum: Math.ceil(Math.max(1, (offset/limit + 1))),
-            prevOffset: Math.max(0, offset - limit),
-            nextOffset: Math.min((offset + limit), (bookCount - limit)),
-            // noLess: PageNum <= 1,
-            // noMore: Math.ceil(Math.max(1, (offset/limit + 1))) = pageTotal
+            pageNum,
+            prevOffset,
+            nextOffset, /*Math.min((offset + limit), (bookCount - limit)),*/
+            firstPage,
+            lastPage
         })
     } catch(e) {
         resp.status(500)
@@ -112,8 +121,20 @@ app.get('/info/:bookId', async (req, resp) => {
         console.info(genresList)
 
         resp.status(200)
-        resp.type('text/html')
-        resp.render('info', {bookResults, genresList})
+        // resp.type('text/html')
+        resp.format({
+            'text/html': () => {
+                resp.render('info', {bookResults, genresList})
+            },
+            'application/json': () => {
+                resp.render('info', {bookResults, genresList})
+            },
+            'default': () => {
+                resp.status(406)
+                resp.send('Not Acceptable')
+            }
+        })
+        // resp.render('info', {bookResults, genresList})
 
     } catch(e) {
         resp.status(500)
@@ -143,6 +164,7 @@ app.get('/reviews/:bkTitle/:bkAuthor', async (req, resp) => {
         }
     )
     console.info(url)
+    
     let result = await fetch(url)
     result = await result.json()
     let bookReview = result.results
@@ -150,8 +172,6 @@ app.get('/reviews/:bkTitle/:bkAuthor', async (req, resp) => {
     console.info(bookReview)
 
     const resultCount = result.num_results
-
-
 
     resp.status(200)
     resp.type('text.html')
