@@ -1,0 +1,39 @@
+{{#if resultCount }}
+
+<div>
+{{#each bookReview}}
+<table>
+    <tr>
+        <td>Book Title: </td>
+        <td>{{this.book_title}}</td>
+    </tr>
+    <tr>
+        <td>Book Author: </td>
+        <td>{{this.book_author}}</td>
+    </tr>
+    <tr>
+        <td>Book Reviewer: </td>
+        <td>{{this.byline}}</td>
+    </tr>
+    <tr>
+        <td>Review Date:</td>
+        <td>{{this.publication_dt}}</td>
+    </tr>
+    <tr>
+        <td>Review Summary: </td>
+        <td>{{this.summary}}</td>
+    </tr>
+    <tr>
+        <td>Full Review:</td>
+        <td><a href="{{this.url}}">Link to full review</a></td>
+    </tr>
+</table>
+{{/each}}
+</div>
+
+<code>{{result.copyright}}</code>
+
+{{else}}
+
+<h3>This book has no reviews on NY Times.</h3>
+{{/if}}

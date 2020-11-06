@@ -1,0 +1,16 @@
+<h2>{{bookResults.title}}</h2>
+
+<p>Authors: {{bookResults.authors}}</p>
+
+<p>Number of pages: {{bookResults.pages}}</p>
+
+<p>Rating: {{bookResults.rating}}</p>
+<p>Number of Rating(s): {{bookResults.rating_count}}</p>
+
+<p>Genres: {{genresList}}</p>
+
+<img src="{{bookResults.image_url}}" alt="">
+
+<a href="/reviews/{{bookResults.title}}/{{bookResults.authors}}"><button type="submit">Find Review</button>
+</a>
+<a href="/"><button type="submit">Home</button></a>

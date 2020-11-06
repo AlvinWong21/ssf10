@@ -1,0 +1,25 @@
+<h2>Letter {{searchLetter}}</h2>
+
+<table>
+    {{#each resultsLetter}}
+    <tr>
+        <td>
+            <a href="/info/{{this.book_id}}">{{this.title}}</a>
+        </td>
+    </tr>
+    {{/each}}
+</table>   
+
+<form method="GET" action="/{{searchLetter}}">
+    <input type="hidden" name="offset" value="{{prevOffset}}">
+    <button type="submit">Previous</button>
+</form>
+
+<p>Page {{pageNum}} / {{pageTotal}}</p>
+
+<form method="GET" action="/{{searchLetter}}">
+    <input type="hidden" name="offset" value="{{nextOffset}}">
+    <button type="submit">Next</button>
+</form>
+
+<a href="/"><button type="submit">Home</button></a>
